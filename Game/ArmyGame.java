@@ -158,7 +158,6 @@ public class ArmyGame implements Game, Observer{
 
 	public void start() {
 		for (int i = 0; i < MAX_NUMBER_OF_PLAYER; ++i) {
-			System.out.println("add obs : " + i);
 			gold[i].addObserver(this);
 		}
 		levelNumber = 0;
@@ -216,7 +215,6 @@ public class ArmyGame implements Game, Observer{
 	}
 
 	public void update(Observable o, Object arg) {
-		System.out.println("update");
 		if (o == endOfGame) {
 			if (endOfGame.getValue()) {
 				informationValue.setText("You win");

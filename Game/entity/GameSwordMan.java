@@ -1,6 +1,7 @@
 package entity;
 
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -8,13 +9,13 @@ import java.awt.Rectangle;
 import gameframework.core.DrawableImage;
 import gameframework.core.SpriteManagerDefaultImpl;
 
-public class PlayerSwordMan extends GameUnit {
+public class GameSwordMan extends GameUnit {
 
 	protected static DrawableImage image = null;
 	protected boolean active = true;
 	private final SpriteManagerDefaultImpl spriteManager;
 
-	public PlayerSwordMan(Canvas defaultCanvas) {
+	public GameSwordMan(Canvas defaultCanvas) {
 		spriteManager = new SpriteManagerDefaultImpl("images/ghost.gif", defaultCanvas, RENDERING_SIZE, 6);
 		spriteManager.setTypes(
 				//
@@ -36,7 +37,6 @@ public class PlayerSwordMan extends GameUnit {
 	public void draw(Graphics g) {
 		String spriteType = "";
 		Point tmp = getSpeedVector().getDirection();
-
 		if (!isActive()) {
 			spriteType = "inactive-";
 		}
@@ -50,7 +50,11 @@ public class PlayerSwordMan extends GameUnit {
 		} else {
 			spriteType += "right";
 		}
-
+		if (selected) {
+			Rectangle box = getSelectBox();
+			g.setColor(Color.GREEN);
+			g.drawRect(box.x, box.y, box.width, box.height);
+		}
 		spriteManager.setType(spriteType);
 		spriteManager.draw(g, getPosition());
 	}
@@ -64,7 +68,5 @@ public class PlayerSwordMan extends GameUnit {
 	public int getSpeed() {
 		return 3;
 	}
-
-
 
 }

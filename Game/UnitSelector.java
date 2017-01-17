@@ -51,16 +51,22 @@ public class UnitSelector extends MouseAdapter implements MouseMotionListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		if (press_point == null)
-			return;
-		for (Selectable unit : selectable_units) {
-
-			if (selector.getRect().intersects(unit.getSelectBox())) {
-				unit.setSelected(true);
+		if (e.getModifiers() == InputEvent.BUTTON1_MASK) {
+			if (press_point == null)
+				return;
+			
+			selector.getRect().x = Math.min(press_point.x, e.getX());
+			selector.getRect().y = Math.min(press_point.y, e.getY());
+			selector.getRect().width = Math.max(1,Math.abs(press_point.x - e.getX()));
+			selector.getRect().height = Math.max(1,Math.abs(press_point.y - e.getY()));
+			for (Selectable unit : selectable_units) {
+				if (selector.getRect().intersects(unit.getSelectBox())) {
+					unit.setSelected(true);
+				}
 			}
+			selector.setRect(null);
+			press_point = null;
 		}
-		selector.setRect(null);
-		press_point = null;
 	}
 
 }

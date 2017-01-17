@@ -1,6 +1,5 @@
 package entity;
 
-
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -8,26 +7,25 @@ import gameframework.core.Drawable;
 import gameframework.core.GameEntity;
 import gameframework.core.GameMovable;
 import gameframework.core.Overlappable;
+import gameframework.moves_rules.MoveBlocker;
 
-public abstract class GameUnit extends GameMovable implements Drawable, GameEntity,
-Overlappable, Selectable {
+public abstract class GameUnit extends GameMovable
+		implements Drawable, GameEntity, Overlappable, MoveBlocker, Selectable {
 	public static final int RENDERING_SIZE = 16;
-	private boolean selected;
+	protected boolean selected;
 	private Point target_position;
-	private Rectangle select_box;
-	
-	GameUnit(){
+
+	GameUnit() {
 		super();
 		selected = false;
-		target_position = new Point(0,0);
-		select_box = new Rectangle(0,0,0,0);
+		target_position = new Point(0, 0);
 	}
-	
-	public void setTarget(int x, int y){
+
+	public void setTarget(int x, int y) {
 		this.target_position.x = x;
 		this.target_position.y = y;
 	}
-	
+
 	public Point getTarget_position() {
 		return target_position;
 	}
@@ -40,9 +38,8 @@ Overlappable, Selectable {
 		return selected;
 	}
 
-
 	public Rectangle getBoundingBox() {
-		return (new Rectangle(0, 0, RENDERING_SIZE, RENDERING_SIZE));
+		return (new Rectangle(this.getPosition().x, this.getPosition().y, RENDERING_SIZE, RENDERING_SIZE));
 	}
 
 	public abstract int getSpeed();
@@ -53,7 +50,7 @@ Overlappable, Selectable {
 
 	@Override
 	public Rectangle getSelectBox() {
-		return new Rectangle(this.getPosition().x, this.getPosition().y,
-				this.getBoundingBox().width, this.getBoundingBox().height);
+		return new Rectangle(this.getPosition().x, this.getPosition().y, this.getBoundingBox().width,
+				this.getBoundingBox().height);
 	}
 }

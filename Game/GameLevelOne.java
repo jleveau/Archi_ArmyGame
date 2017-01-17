@@ -1,6 +1,6 @@
 import java.awt.Point;
 
-import entity.PlayerSwordMan;
+import entity.GameSwordMan;
 import entity.Selector;
 import entity.Wall;
 import gameframework.core.CanvasDefaultImpl;
@@ -52,7 +52,7 @@ public class GameLevelOne extends ArmyGameLevel {
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
@@ -88,7 +88,7 @@ public class GameLevelOne extends ArmyGameLevel {
 			gold[i].setValue(base_gold);
 		}
 
-		PlayerSwordMan sword_man;
+		GameSwordMan sword_man;
 		for (int j = 0; j < tab.length; j++) {
 			for (int i = 0; i < tab[j].length; i++) {
 				//Create Walls
@@ -101,7 +101,7 @@ public class GameLevelOne extends ArmyGameLevel {
 					MoveStrategyRandom ranStr = new MoveStrategyRandom();
 					enemyDriv.setStrategy(ranStr);
 					enemyDriv.setmoveBlockerChecker(moveBlockerChecker);
-					sword_man = new PlayerSwordMan(canvas);
+					sword_man = new GameSwordMan(canvas);
 					sword_man.setDriver(enemyDriv);
 					sword_man.setPosition(new Point(i * SPRITE_SIZE, j * SPRITE_SIZE));
 					sword_man.setTarget(i * SPRITE_SIZE, j * SPRITE_SIZE);
@@ -114,7 +114,7 @@ public class GameLevelOne extends ArmyGameLevel {
 					canvas.addMouseListener(mouse_str);
 					playerDriver.setStrategy(mouse_str);
 					playerDriver.setmoveBlockerChecker(moveBlockerChecker);
-					sword_man = new PlayerSwordMan(canvas);
+					sword_man = new GameSwordMan(canvas);
 					sword_man.setDriver(playerDriver);
 					sword_man.setPosition(new Point(i * SPRITE_SIZE, j * SPRITE_SIZE));
 					sword_man.setTarget(i * SPRITE_SIZE, j * SPRITE_SIZE);
