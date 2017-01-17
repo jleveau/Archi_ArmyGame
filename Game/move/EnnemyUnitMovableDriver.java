@@ -1,4 +1,4 @@
-package rules;
+package move;
 
 import java.awt.Point;
 

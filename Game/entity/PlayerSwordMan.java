@@ -8,14 +8,13 @@ import java.awt.Rectangle;
 import gameframework.core.DrawableImage;
 import gameframework.core.SpriteManagerDefaultImpl;
 
-public class GameSwordMan extends GameUnit {
+public class PlayerSwordMan extends GameUnit {
 
 	protected static DrawableImage image = null;
 	protected boolean active = true;
 	private final SpriteManagerDefaultImpl spriteManager;
-	public static final int RENDERING_SIZE = 16;
 
-	public GameSwordMan(Canvas defaultCanvas) {
+	public PlayerSwordMan(Canvas defaultCanvas) {
 		spriteManager = new SpriteManagerDefaultImpl("images/ghost.gif", defaultCanvas, RENDERING_SIZE, 6);
 		spriteManager.setTypes(
 				//
@@ -61,8 +60,11 @@ public class GameSwordMan extends GameUnit {
 		spriteManager.increment();
 	}
 
-	public Rectangle getBoundingBox() {
-		return (new Rectangle(0, 0, RENDERING_SIZE, RENDERING_SIZE));
+	@Override
+	public int getSpeed() {
+		return 3;
 	}
+
+
 
 }

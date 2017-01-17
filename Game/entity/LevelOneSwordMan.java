@@ -9,4 +9,9 @@ public class LevelOneSwordMan extends EnemyUnit{
 		super(factory, game_unit);
 	}
 
+	@Override
+	public int getSpeed() {
+		return 1;
+	}
+
 }

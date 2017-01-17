@@ -1,6 +1,6 @@
 import java.awt.Point;
 
-import entity.GameSwordMan;
+import entity.PlayerSwordMan;
 import entity.Wall;
 import gameframework.core.CanvasDefaultImpl;
 import gameframework.core.GameMovableDriverDefaultImpl;
@@ -11,8 +11,12 @@ import gameframework.moves_rules.MoveBlockerCheckerDefaultImpl;
 import gameframework.moves_rules.MoveStrategyRandom;
 import gameframework.moves_rules.OverlapProcessor;
 import gameframework.moves_rules.OverlapProcessorDefaultImpl;
-import rules.EnnemyUnitMovableDriver;
-import rules.UnitOverlapRule;
+import move.EnnemyUnitMovableDriver;
+import move.MoveStrategyMouse;
+import move.PlayerUnitMoveDriver;
+import move.UnitMoveBlockers;
+import overlap.UnitOverlapRule;
+import pacman.rule.PacmanMoveBlockers;
 import soldier.gameLevel.LevelOneFactory;
 
 public class GameLevelOne extends ArmyGameLevel {
@@ -46,7 +50,7 @@ public class GameLevelOne extends ArmyGameLevel {
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
@@ -64,6 +68,7 @@ public class GameLevelOne extends ArmyGameLevel {
 		OverlapProcessor overlap_proc = new OverlapProcessorDefaultImpl();
 
 		overlap_proc.setOverlapRules(new UnitOverlapRule());
+		moveBlockerChecker.setMoveBlockerRules(new UnitMoveBlockers());
 
 		universe = new GameUniverseDefaultImpl(moveBlockerChecker, overlap_proc);
 
@@ -74,8 +79,7 @@ public class GameLevelOne extends ArmyGameLevel {
 			gold[i].setValue(base_gold);
 		}
 
-		GameSwordMan enemy;
-		LevelOneFactory enemy_factory = new LevelOneFactory();
+		PlayerSwordMan sword_man;
 		for (int j = 0; j < tab.length; j++) {
 			for (int i = 0; i < tab[j].length; i++) {
 				//Create Walls
@@ -88,10 +92,22 @@ public class GameLevelOne extends ArmyGameLevel {
 					MoveStrategyRandom ranStr = new MoveStrategyRandom();
 					enemyDriv.setStrategy(ranStr);
 					enemyDriv.setmoveBlockerChecker(moveBlockerChecker);
-					enemy = new GameSwordMan(canvas);
-					enemy.setDriver(enemyDriv);
-					enemy.setPosition(new Point(i * SPRITE_SIZE, j * SPRITE_SIZE));
-					universe.addGameEntity(enemy);
+					sword_man = new PlayerSwordMan(canvas);
+					sword_man.setDriver(enemyDriv);
+					sword_man.setPosition(new Point(i * SPRITE_SIZE, j * SPRITE_SIZE));
+					universe.addGameEntity(sword_man);
+					//(overlapRules).addGhost(myGhost);
+				}
+				if (tab[j][i] == 3){
+					GameMovableDriverDefaultImpl playerDriver = new PlayerUnitMoveDriver();
+					MoveStrategyMouse mouse_str = new MoveStrategyMouse();
+					canvas.addMouseListener(mouse_str);
+					playerDriver.setStrategy(mouse_str);
+					playerDriver.setmoveBlockerChecker(moveBlockerChecker);
+					sword_man = new PlayerSwordMan(canvas);
+					sword_man.setDriver(playerDriver);
+					sword_man.setPosition(new Point(i * SPRITE_SIZE, j * SPRITE_SIZE));
+					universe.addGameEntity(sword_man);
 					//(overlapRules).addGhost(myGhost);
 				}
 			}

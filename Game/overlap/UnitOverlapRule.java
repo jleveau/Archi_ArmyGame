@@ -1,4 +1,4 @@
-package rules;
+package overlap;
 
 import gameframework.core.GameUniverse;
 import gameframework.moves_rules.OverlapRulesApplierDefaultImpl;

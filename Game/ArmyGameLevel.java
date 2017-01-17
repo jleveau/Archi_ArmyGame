@@ -16,6 +16,9 @@ public abstract class ArmyGameLevel extends Thread implements GameLevel{
 	protected GameUniverseViewPort gameBoard;
 
 	protected ObservableValue<Integer> gold[];
+	protected ObservableValue<Integer> enemy_units[];
+	protected ObservableValue<Integer> player_units[];
+
 	protected ObservableValue<Boolean> endOfGame;
 	
 	protected abstract void init();
