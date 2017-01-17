@@ -1,6 +1,7 @@
 import java.awt.Point;
 
 import entity.PlayerSwordMan;
+import entity.Selector;
 import entity.Wall;
 import gameframework.core.CanvasDefaultImpl;
 import gameframework.core.GameMovableDriverDefaultImpl;
@@ -23,6 +24,7 @@ public class GameLevelOne extends ArmyGameLevel {
 
 	public static int BASE_GOLD = 1000;
 	private int NB_ENEMY = 10;
+	
 
 	public GameLevelOne(ArmyGame g) {
 		super(g, BASE_GOLD);
@@ -74,6 +76,13 @@ public class GameLevelOne extends ArmyGameLevel {
 
 		gameBoard = new GameUniverseViewPortDefaultImpl(canvas, universe);
 		((CanvasDefaultImpl) canvas).setDrawingGameBoard(gameBoard);
+		
+		//Rectangle used to select units with the mouse
+		Selector selector = new Selector();
+		universe.addGameEntity(selector);
+		UnitSelector unit_selector = new UnitSelector(selector);
+		canvas.addMouseListener(unit_selector);
+		canvas.addMouseMotionListener(unit_selector);
 
 		for (int i = 0; i < this.gold.length; i++) {
 			gold[i].setValue(base_gold);
@@ -95,6 +104,7 @@ public class GameLevelOne extends ArmyGameLevel {
 					sword_man = new PlayerSwordMan(canvas);
 					sword_man.setDriver(enemyDriv);
 					sword_man.setPosition(new Point(i * SPRITE_SIZE, j * SPRITE_SIZE));
+					sword_man.setTarget(i * SPRITE_SIZE, j * SPRITE_SIZE);
 					universe.addGameEntity(sword_man);
 					//(overlapRules).addGhost(myGhost);
 				}
@@ -107,7 +117,10 @@ public class GameLevelOne extends ArmyGameLevel {
 					sword_man = new PlayerSwordMan(canvas);
 					sword_man.setDriver(playerDriver);
 					sword_man.setPosition(new Point(i * SPRITE_SIZE, j * SPRITE_SIZE));
+					sword_man.setTarget(i * SPRITE_SIZE, j * SPRITE_SIZE);
 					universe.addGameEntity(sword_man);
+					unit_selector.addUnit(sword_man);
+
 					//(overlapRules).addGhost(myGhost);
 				}
 			}

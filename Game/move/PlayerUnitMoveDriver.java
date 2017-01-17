@@ -13,28 +13,44 @@ public class PlayerUnitMoveDriver extends GameMovableDriverDefaultImpl {
 	private int base_speed = 1;
 
 	public SpeedVector getSpeedVector(Movable m) {
-
-		SpeedVector target_position;
-		// Retreive target point
-		target_position = moveStrategy.getSpeedVector();
-		if (target_position == null)
-			return new SpeedVectorDefaultImpl(new Point(0,0), 1); 
-		if (target_position.getDirection().distance(m.getPosition()) == 0)
-			return target_position;
-
-		Point current_pos = m.getPosition();
-		// Compute direction to target
+		
+		
 		int speed;
+		SpeedVector target_position = moveStrategy.getSpeedVector();
+
+		//Case no target
+		if (target_position == null)
+			return new SpeedVectorDefaultImpl(new Point(0,0), 1);
+		if (target_position.getDirection() == null)
+			return new SpeedVectorDefaultImpl(new Point(0,0), 1);
+		
 		if (m instanceof GameUnit) {
-			speed = ((GameUnit) m).getSpeed();
+			GameUnit gm = (GameUnit) m;
+
+			speed = gm.getSpeed();
+			if (gm.isSelected()){
+				gm.setTarget_position(target_position.getDirection());
+			}
+			else{
+				target_position.setDirection(gm.getTarget_position());
+			}
 		} else
 		{
 			speed = base_speed;
 		}
+		//Case target reached
+		if (target_position.getDirection().distance(m.getPosition()) == 0)
+			return new SpeedVectorDefaultImpl(new Point(0,0), 1);
+
+		Point current_pos = m.getPosition();
+
+		// Compute direction to target
+
 		int dir_x = target_position.getDirection().x - current_pos.x;
 		int dir_y = target_position.getDirection().y - current_pos.y;
 		int new_x, new_y;
 		
+
 		if (Math.abs(dir_x) <= speed)
 			new_x = 0;
 		else {
@@ -53,7 +69,6 @@ public class PlayerUnitMoveDriver extends GameMovableDriverDefaultImpl {
 			else new_y = -speed;
 		}
 		Point direction = new Point(new_x, new_y);
-
 		SpeedVector possibleSpeedVector = new SpeedVectorDefaultImpl(direction, 1);
 		if (moveBlockerChecker.moveValidation(m, possibleSpeedVector)) {
 			return possibleSpeedVector;
