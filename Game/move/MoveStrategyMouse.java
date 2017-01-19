@@ -14,8 +14,9 @@ public class MoveStrategyMouse extends MouseAdapter implements MoveStrategy {
 	
 	@Override
 	public void mousePressed(MouseEvent e) {
-		speedVector = new SpeedVectorDefaultImpl(new Point(e.getX(), e.getY()));
-
+		if (e.getButton() == MouseEvent.BUTTON3){
+			speedVector = new SpeedVectorDefaultImpl(new Point(e.getX(), e.getY()));
+		}
 	}
 
 	public void resetSpeedVector(){

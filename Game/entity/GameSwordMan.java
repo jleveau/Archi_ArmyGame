@@ -5,18 +5,30 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.Iterator;
 
+import gameframework.core.Drawable;
 import gameframework.core.DrawableImage;
+import gameframework.core.GameEntity;
+import gameframework.core.GameMovable;
+import gameframework.core.Overlappable;
 import gameframework.core.SpriteManagerDefaultImpl;
+import gameframework.moves_rules.MoveBlocker;
+import observer_util.Observer;
+import soldier.core.Unit;
+import soldier.core.UnitVisitor;
+import soldier.core.Weapon;
 
-public class GameSwordMan extends GameUnit {
+public class GameSwordMan extends GameUnitEntity implements MoveBlocker{
 
 	protected static DrawableImage image = null;
 	protected boolean active = true;
 	private final SpriteManagerDefaultImpl spriteManager;
 
+
 	public GameSwordMan(Canvas defaultCanvas) {
-		spriteManager = new SpriteManagerDefaultImpl("images/ghost.gif", defaultCanvas, RENDERING_SIZE, 6);
+		super(defaultCanvas);
+		spriteManager = new SpriteManagerDefaultImpl("images/ghost.gif", defaultCanvas, RENDERING_SIZE, 16);
 		spriteManager.setTypes(
 				//
 				"left", "right", "up", "down", //
@@ -26,47 +38,8 @@ public class GameSwordMan extends GameUnit {
 				"unused");
 	}
 
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setAlive(boolean aliveState) {
-		active = aliveState;
-	}
-
-	public void draw(Graphics g) {
-		String spriteType = "";
-		Point tmp = getSpeedVector().getDirection();
-		if (!isActive()) {
-			spriteType = "inactive-";
-		}
-
-		if (tmp.getX() == -1) {
-			spriteType += "left";
-		} else if (tmp.getY() == 1) {
-			spriteType += "down";
-		} else if (tmp.getY() == -1) {
-			spriteType += "up";
-		} else {
-			spriteType += "right";
-		}
-		if (selected) {
-			Rectangle box = getSelectBox();
-			g.setColor(Color.GREEN);
-			g.drawRect(box.x, box.y, box.width, box.height);
-		}
-		spriteManager.setType(spriteType);
-		spriteManager.draw(g, getPosition());
-	}
-
-	@Override
-	public void oneStepMoveAddedBehavior() {
-		spriteManager.increment();
-	}
-
-	@Override
 	public int getSpeed() {
-		return 3;
+		return 5;
 	}
 
 }

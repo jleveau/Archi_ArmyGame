@@ -60,7 +60,7 @@ public class UnitSelector extends MouseAdapter implements MouseMotionListener {
 			selector.getRect().width = Math.max(1,Math.abs(press_point.x - e.getX()));
 			selector.getRect().height = Math.max(1,Math.abs(press_point.y - e.getY()));
 			for (Selectable unit : selectable_units) {
-				if (selector.getRect().intersects(unit.getSelectBox())) {
+				if (unit.isSelectedBy(selector.getRect())) {
 					unit.setSelected(true);
 				}
 			}

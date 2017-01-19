@@ -28,7 +28,6 @@ public class MoveBlockerRulesApplierDefaultImpl implements
 	private void moveBlockerRuleApply(Movable e1, MoveBlocker e2)
 			throws Exception {
 		Method m = null;
-
 		m = (getClass()).getMethod("moveBlockerRule", e1.getClass(),
 				e2.getClass());
 		m.invoke(this, e1, e2);

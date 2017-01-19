@@ -12,8 +12,8 @@ public class UnitMoveBlockers extends MoveBlockerRulesApplierDefaultImpl {
 		throw new IllegalMoveException();
 	}
 
-	public void moveBlockerRule(GameSwordMan game_unit, GameSwordMan w) throws IllegalMoveException {
-		if (game_unit.equals(w))
+	public void moveBlockerRule(GameSwordMan game_unit, GameUnit w) throws IllegalMoveException {
+		if (game_unit.equals(w.getGame_unit()))
 			return;
 		throw new IllegalMoveException();
 	}
