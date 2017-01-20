@@ -15,8 +15,8 @@ public class LevelOneUnitFactory extends GameAbstractFactory{
 		f = new AgeMiddleFactory();
 	}
 	
-	public GameUnit infantryUnit(Canvas canvas, String name) {
-		return new GameUnit(new GameSwordMan(canvas), f.infantryUnit(name));
+	public GameSwordMan infantryUnit(Canvas canvas, String name) {
+		return new GameSwordMan(canvas, f.infantryUnit(name));
 	}
 
 

@@ -16,7 +16,7 @@ public abstract class GameAbstractFactory {
 
 	public abstract Unit infantryUnit(Canvas canvas, String name);
 
-	public GameUnit regiment(String name) {
-		return new GameUnit(new GameUnitGroup(canvas), new UnitGroup(name));
+	public GameUnitGroup regiment(String name) {
+		return new GameUnitGroup(canvas, new UnitGroup(name));
 	}
 }

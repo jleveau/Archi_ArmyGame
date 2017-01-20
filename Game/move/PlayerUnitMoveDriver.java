@@ -76,14 +76,15 @@ public class PlayerUnitMoveDriver extends GameMovableDriverDefaultImpl {
 		if (moveBlockerChecker.moveValidation(m, possibleSpeedVector)) {
 			return possibleSpeedVector;
 		}
-		Random rand = new Random();
-		if (rand.nextInt(100)<10){
-			SpeedVector rand_vector = random_str.getSpeedVector();
-			rand_vector.setSpeed(speed);
-			if (moveBlockerChecker.moveValidation(m, rand_vector)) {
-				return rand_vector;
-			}
+		possibleSpeedVector = new SpeedVectorDefaultImpl(new Point(direction.x,0), speed);
+		if (moveBlockerChecker.moveValidation(m, possibleSpeedVector)) {
+			return possibleSpeedVector;
 		}
+		possibleSpeedVector = new SpeedVectorDefaultImpl(new Point(0,direction.y), speed);
+		if (moveBlockerChecker.moveValidation(m, possibleSpeedVector)) {
+			return possibleSpeedVector;
+		}
+
 		return SpeedVectorDefaultImpl.createNullVector();
 	}
 }

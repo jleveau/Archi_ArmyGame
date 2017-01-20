@@ -21,6 +21,9 @@ public abstract class ArmyGameLevel extends Thread implements GameLevel{
 
 	protected ObservableValue<Boolean> endOfGame;
 	
+	protected static int Player_team = 0;
+	protected static int Enemy_team = 1;
+	
 	protected abstract void init();
 	
 	public int getBaseGold(){

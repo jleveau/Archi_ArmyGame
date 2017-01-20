@@ -18,24 +18,16 @@ import observer_util.Observer;
 import soldier.core.Unit;
 import soldier.core.UnitVisitor;
 import soldier.core.Weapon;
+import units_states.StrikeState;
 
 public class GameSwordMan extends GameUnitEntity implements MoveBlocker{
 
 	protected static DrawableImage image = null;
 	protected boolean active = true;
-	private final SpriteManagerDefaultImpl spriteManager;
 
 
-	public GameSwordMan(Canvas defaultCanvas) {
-		super(defaultCanvas);
-		spriteManager = new SpriteManagerDefaultImpl("images/ghost.gif", defaultCanvas, RENDERING_SIZE, 16);
-		spriteManager.setTypes(
-				//
-				"left", "right", "up", "down", //
-				"beginAfraid-left", "beginAfraid-right", "beginAfraid-up", "beginAfraid-down", //
-				"endAfraid-left", "endAfraid-right", "endAfraid-up", "endAfraid-down", //
-				"inactive-left", "inactive-right", "inactive-up", "inactive-down", //
-				"unused");
+	public GameSwordMan(Canvas defaultCanvas, Unit unit) {
+		super(defaultCanvas, unit);
 	}
 
 	public int getSpeed() {

@@ -1,4 +1,5 @@
 import java.awt.Point;
+import java.util.Observer;
 
 import behaviors.LevelOneUnitFactory;
 import entity.GameSwordMan;
@@ -20,12 +21,15 @@ import move.GameMoveBlockerChecker;
 import move.MoveStrategyMouse;
 import move.PlayerUnitMoveDriver;
 import move.UnitMoveBlockers;
+import observers.KillObserver;
 import overlap.UnitOverlapRule;
 import pacman.rule.PacmanMoveBlockers;
 import soldier.core.UnitGroup;
 import soldier.gameLevel.LevelOneFactory;
 
 public class GameLevelOne extends ArmyGameLevel {
+	
+
 
 	public static int BASE_GOLD = 1000;
 	private int NB_ENEMY = 10;
@@ -82,6 +86,8 @@ public class GameLevelOne extends ArmyGameLevel {
 
 		gameBoard = new GameUniverseViewPortDefaultImpl(canvas, universe);
 		((CanvasDefaultImpl) canvas).setDrawingGameBoard(gameBoard);
+		
+		KillObserver kill_obs = new KillObserver(universe);
 
 		//Rectangle used to select units with the mouse
 		Selector selector = new Selector();
@@ -94,12 +100,12 @@ public class GameLevelOne extends ArmyGameLevel {
 			gold[i].setValue(base_gold);
 		}
 
-		GameUnit sword_man;
+		GameSwordMan sword_man;
 		LevelOneUnitFactory factory = new LevelOneUnitFactory(canvas);
 
-		GameUnit regiment = factory.regiment("reg 1");
-		GameUnit regiment_2 = factory.regiment("reg 2");
-
+		GameUnitGroup regiment = factory.regiment("reg 1");
+		GameUnitGroup regiment_2 = factory.regiment("reg 2");
+		
 
 		for (int j = 0; j < tab.length; j++) {
 			for (int i = 0; i < tab[j].length; i++) {
@@ -116,7 +122,10 @@ public class GameLevelOne extends ArmyGameLevel {
 					sword_man = factory.infantryUnit(canvas, "Enemy swordman");
 					sword_man.setDriver(enemyDriv);
 					sword_man.setPosition(new Point(i * SPRITE_SIZE, j * SPRITE_SIZE));
+					sword_man.setTeam(Enemy_team);
+					sword_man.addObserver(kill_obs);
 					universe.addGameEntity(sword_man);
+
 					//(overlapRules).addGhost(myGhost);
 				}
 				if (tab[j][i] == 3){
@@ -128,9 +137,9 @@ public class GameLevelOne extends ArmyGameLevel {
 					sword_man =  factory.infantryUnit(canvas, "Player swordman");
 					sword_man.setDriver(playerDriver);
 					sword_man.setPosition(new Point(i * SPRITE_SIZE, j * SPRITE_SIZE));
+					sword_man.setTeam(Player_team);
 					regiment.addUnit(sword_man);
 					universe.addGameEntity(sword_man);
-
 					//(overlapRules).addGhost(myGhost);
 				}
 				
@@ -150,6 +159,8 @@ public class GameLevelOne extends ArmyGameLevel {
 				}
 			}
 		}
+		universe.addGameEntity(regiment);
+
 		unit_selector.addUnit(regiment);
 		unit_selector.addUnit(regiment_2);
 

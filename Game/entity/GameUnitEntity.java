@@ -6,26 +6,41 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import javax.xml.bind.annotation.adapters.NormalizedStringAdapter;
+
 import exceptions.IllegalAddException;
 import gameframework.core.Drawable;
 import gameframework.core.DrawableImage;
 import gameframework.core.GameEntity;
 import gameframework.core.GameMovable;
+import gameframework.core.Movable;
 import gameframework.core.Overlappable;
+import gameframework.core.SpriteManager;
 import gameframework.core.SpriteManagerDefaultImpl;
+import gameframework.moves_rules.MoveBlocker;
+import soldier.core.Unit;
+import units_states.GameUnitState;
+import units_states.NormalState;
+import units_states.StrikeState;
 
-public abstract class GameUnitEntity extends GameMovable implements Drawable, GameEntity, Overlappable, Selectable{
+public abstract class GameUnitEntity extends GameUnit implements Drawable{
 
 	protected static DrawableImage image = null;
 	protected boolean active = true;
-	private final SpriteManagerDefaultImpl spriteManager;
-	public static final int RENDERING_SIZE = 16;
+
 	public static final int BASE_SPEED = 3;
 	protected boolean selected;
 	Point target_position;
+	GameUnitState state;
+	private SpriteManager spriteManager;
 
-	public GameUnitEntity(Canvas defaultCanvas) {
-		spriteManager = new SpriteManagerDefaultImpl("images/ghost.gif", defaultCanvas, RENDERING_SIZE, 6);
+	public GameUnitEntity(Canvas defaultCanvas, Unit unit) {
+		super(unit);
+		canvas = defaultCanvas;
+		spriteManager = new SpriteManagerDefaultImpl("images/ghost.gif", canvas, RENDERING_SIZE, 6);
+
+		state = NormalState.getInstance(spriteManager);
+
 		spriteManager.setTypes(
 				//
 				"left", "right", "up", "down", //
@@ -34,6 +49,14 @@ public abstract class GameUnitEntity extends GameMovable implements Drawable, Ga
 				"inactive-left", "inactive-right", "inactive-up", "inactive-down", //
 				"unused");
 	}
+
+
+	@Override
+	public boolean canStrike() {
+		System.out.println(state);
+		return state.canStrike();
+	}
+
 
 	public boolean isActive() {
 		return active;
@@ -44,33 +67,12 @@ public abstract class GameUnitEntity extends GameMovable implements Drawable, Ga
 	}
 
 	public void draw(Graphics g) {
-		String spriteType = "";
-		Point tmp = getSpeedVector().getDirection();
-		if (!isActive()) {
-			spriteType = "inactive-";
-		}
-
-		if (tmp.getX() == -1) {
-			spriteType += "left";
-		} else if (tmp.getY() == 1) {
-			spriteType += "down";
-		} else if (tmp.getY() == -1) {
-			spriteType += "up";
-		} else {
-			spriteType += "right";
-		}
-		if (selected) {
-			Rectangle box = getBoundingBox();
-			g.setColor(Color.GREEN);
-			g.drawRect(box.x, box.y, box.width, box.height);
-		}
-		spriteManager.setType(spriteType);
-		spriteManager.draw(g, getPosition());
+		state.draw(g, this);
 	}
 
 	@Override
 	public void oneStepMoveAddedBehavior() {
-		spriteManager.increment();
+		state.increment();
 	}
 
 	public int getSpeed() {
@@ -113,6 +115,23 @@ public abstract class GameUnitEntity extends GameMovable implements Drawable, Ga
 
 	public void removeUnit(GameUnitEntity game_unit) throws IllegalAddException {
 		throw new IllegalAddException();
+	}
+	
+	public GameUnitState getState() {
+		return state;
+	}
+
+	public void setState(GameUnitState state) {
+		this.state = state;
+	}
+
+	public void setStrikeState(){
+		System.out.println(StrikeState.getInstance(spriteManager));
+		this.state = StrikeState.getInstance(spriteManager);
+	}
+	
+	public void setNormalState(){
+		this.state = NormalState.getInstance(spriteManager);
 	}
 
 }

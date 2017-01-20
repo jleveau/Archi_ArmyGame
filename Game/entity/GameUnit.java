@@ -19,65 +19,19 @@ import soldier.core.Unit;
 import soldier.core.UnitVisitor;
 import soldier.core.Weapon;
 
-public class GameUnit extends GameMovable
-		implements Drawable, GameEntity, MoveBlocker,Overlappable, Selectable, Unit {
+public abstract class GameUnit extends GameMovable implements GameUnitItf{
 	public static final int RENDERING_SIZE = 16;
 
-
-	public void setGame_unit(GameUnitEntity game_unit) {
-		this.game_unit = game_unit;
-	}
-
 	private Unit unit_behavior;
-	private GameUnitEntity game_unit;
 	protected Canvas canvas;
+	private int team;
 
 
-	public GameUnit(GameUnitEntity game_unit, Unit unit) {
+	public GameUnit(Unit unit) {
 		super();
 		this.unit_behavior = unit;
-		this.game_unit = game_unit;
 	}
 
-	public void addUnit(GameUnit g) {
-		this.unit_behavior.addUnit(g.unit_behavior);
-		try {
-			this.game_unit.addUnit(g.game_unit);
-		}catch(IllegalAddException e){}
-	}
-
-	public void removeUnit(GameUnit g) {
-		this.unit_behavior.removeUnit(g.unit_behavior);
-		try {
-		this.game_unit.removeUnit(g.game_unit);
-		}catch(IllegalAddException e){}
-	}
-	
-	public int getSpeed() {
-		return this.game_unit.getSpeed();
-	}
-
-	public void oneStepMoveAddedBehavior() {
-		this.game_unit.oneStepMoveAddedBehavior();
-		
-	}
-	
-	public GameUnitEntity getGame_unit() {
-		return game_unit;
-	}
-
-	public boolean isSelected() {
-		return game_unit.isSelected();
-	}
-
-	public Rectangle getBoundingBox() {
-		return game_unit.getBoundingBox();
-	}
-
-	public void setSelected(boolean b) {
-		game_unit.setSelected(b);
-	}
-	
 	@Override
 	public String getName() {
 		return unit_behavior.getName();
@@ -100,7 +54,20 @@ public class GameUnit extends GameMovable
 
 	@Override
 	public float parry(float force) {
-		return unit_behavior.parry(force);
+		float health = unit_behavior.parry(force);
+		if (!alive())
+			notifyObservers(this);
+		return health;
+	}
+	
+	public boolean canStrike(){
+		return false;
+	}
+	
+	public void attack(GameUnit enemy){
+		if (canStrike()){
+			enemy.parry(strike());
+		}
 	}
 
 	@Override
@@ -142,29 +109,6 @@ public class GameUnit extends GameMovable
 	public void notifyObservers(Unit s) {
 		unit_behavior.notifyObservers(s);
 	}
-
-	public void setTarget_position(Point direction) {
-		this.game_unit.setTarget_position(direction);
-	}
-
-	public Point getTarget_position() {
-		return this.game_unit.getTarget_position();
-	}
-
-	@Override
-	public boolean isSelectedBy(Rectangle rect) {
-		return game_unit.isSelectedBy(rect);
-	}
-
-	@Override
-	public Point getPosition() {
-		return game_unit.getPosition();
-	}
-
-	@Override
-	public void draw(Graphics g) {
-		this.game_unit.draw(g);
-	}
 	
 	@Override
 	public void addUnit(Unit au) {
@@ -181,35 +125,16 @@ public class GameUnit extends GameMovable
 		return unit_behavior.subUnits();
 	}
 	
-
 	@Override
-	public void setPosition(Point p) {
-		game_unit.setPosition(p);
+	public int getTeam() {
+		
+		return team;
 	}
 
 	@Override
-	public void setSpeedVector(SpeedVector speedVector) {
-		game_unit.setSpeedVector(speedVector);
-	}
-
-	@Override
-	public SpeedVector getSpeedVector() {
-		return game_unit.getSpeedVector();
-	}
-
-	@Override
-	public void setDriver(GameMovableDriver driver) {
-		game_unit.setDriver(driver);
-	}
-
-	@Override
-	public GameMovableDriver getDriver() {
-		return game_unit.getDriver();
-	}
-
-	@Override
-	public void oneStepMove() {
-		game_unit.oneStepMove();
+	public void setTeam(int team) {
+		this.team = team;
+		
 	}
 
 }
