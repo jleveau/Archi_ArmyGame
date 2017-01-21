@@ -31,6 +31,11 @@ public abstract class UnitSimple extends ObservableAbstract<Unit>
 	}
 
 	@Override
+	public float getMaxHealthPoints() {
+		return behavior.getMaxHealthPoints();
+	}
+
+	@Override
 	public boolean alive() {
 		return behavior.alive();
 	}

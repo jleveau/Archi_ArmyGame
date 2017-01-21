@@ -27,6 +27,11 @@ public abstract class BehaviorExtension implements BehaviorSoldier {
 	}
 
 	@Override
+	public float getMaxHealthPoints() {
+		return soldier.getMaxHealthPoints();
+	}
+
+	@Override
 	public boolean alive() {
 		return soldier.alive();
 	}

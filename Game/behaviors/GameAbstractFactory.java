@@ -4,6 +4,7 @@ import java.awt.Canvas;
 
 import entity.GameUnit;
 import entity.GameUnitGroup;
+import entity.Regiment;
 import soldier.core.Unit;
 import soldier.core.UnitGroup;
 
@@ -16,7 +17,7 @@ public abstract class GameAbstractFactory {
 
 	public abstract Unit infantryUnit(Canvas canvas, String name);
 
-	public GameUnitGroup regiment(String name) {
-		return new GameUnitGroup(canvas, new UnitGroup(name));
+	public Regiment regiment(String name) {
+		return new Regiment(canvas, new UnitGroup(name));
 	}
 }

@@ -13,38 +13,26 @@ import gameframework.moves_rules.MoveStrategyRandom;
 import gameframework.moves_rules.SpeedVector;
 import gameframework.moves_rules.SpeedVectorDefaultImpl;
 
-public class PlayerUnitMoveDriver extends GameMovableDriverDefaultImpl {
+public class MoveToTargetDriver extends GameMovableDriverDefaultImpl {
 
 	private int base_speed = 1;
-	MoveStrategy random_str;
-	
-	public PlayerUnitMoveDriver(){
-		random_str = new MoveStrategyRandom();
-	}
 
 	public SpeedVector getSpeedVector(Movable m) {
-		int speed;
-		SpeedVector target_position = moveStrategy.getSpeedVector();
+		int speed = 0;
+		SpeedVector target_position = null;;
 		//Case no target
+	
+		if (m instanceof GameUnitEntity) {
+			GameUnitEntity gm = (GameUnitEntity) m;
+			speed = gm.getSpeed();
+			target_position = new SpeedVectorDefaultImpl(gm.getTarget_position(),speed);
+		} 
+		
 		if (target_position == null)
 			return SpeedVectorDefaultImpl.createNullVector();
 		if (target_position.getDirection() == null)
 			return SpeedVectorDefaultImpl.createNullVector();
 		
-		if (m instanceof GameUnitEntity) {
-			GameUnitEntity gm = (GameUnitEntity) m;
-			speed = gm.getSpeed();
-			if (gm.isSelected()){
-				gm.setTarget_position(target_position.getDirection());
-			}
-			else{
-				target_position.setDirection(gm.getTarget_position());
-			}
-		} else
-		{
-			speed = base_speed;
-		}
-
 		Point current_pos = m.getPosition();
 
 		// Compute direction to target

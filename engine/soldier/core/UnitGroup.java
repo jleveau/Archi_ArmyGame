@@ -15,6 +15,8 @@ import observer_util.ObservableAbstract;
 public class UnitGroup extends ObservableAbstract<Unit> 
                        implements Unit {
 
+
+
 	private Set<Unit> units;
 	private String name;
 
@@ -51,6 +53,15 @@ public class UnitGroup extends ObservableAbstract<Unit>
 		float sum = 0.f;
 		for (Unit u : units)
 			sum += u.getHealthPoints();
+		return sum;
+	}
+	
+	@Override
+	public float getMaxHealthPoints() {
+		float sum = 0.f;
+		for (Unit u : units){
+			sum += u.getMaxHealthPoints();
+		}
 		return sum;
 	}
 

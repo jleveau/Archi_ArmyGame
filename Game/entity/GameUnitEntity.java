@@ -18,17 +18,17 @@ import gameframework.core.Overlappable;
 import gameframework.core.SpriteManager;
 import gameframework.core.SpriteManagerDefaultImpl;
 import gameframework.moves_rules.MoveBlocker;
+import observer_util.Observable;
 import soldier.core.Unit;
 import units_states.GameUnitState;
 import units_states.NormalState;
 import units_states.StrikeState;
 
-public abstract class GameUnitEntity extends GameUnit implements Drawable{
+public abstract class GameUnitEntity extends GameUnit implements Drawable {
 
 	protected static DrawableImage image = null;
 	protected boolean active = true;
-
-	public static final int BASE_SPEED = 3;
+	private static int ARBITRARY_REACH_TARGET=5;
 	protected boolean selected;
 	Point target_position;
 	GameUnitState state;
@@ -50,13 +50,10 @@ public abstract class GameUnitEntity extends GameUnit implements Drawable{
 				"unused");
 	}
 
-
 	@Override
 	public boolean canStrike() {
-		System.out.println(state);
 		return state.canStrike();
 	}
-
 
 	public boolean isActive() {
 		return active;
@@ -71,14 +68,21 @@ public abstract class GameUnitEntity extends GameUnit implements Drawable{
 	}
 
 	@Override
-	public void oneStepMoveAddedBehavior() {
-		state.increment();
+	public void receive_order(Point p) {
+		setTarget_position(p);
 	}
 
-	public int getSpeed() {
-		return BASE_SPEED;
+	@Override
+	public void oneStepMoveAddedBehavior() {
+		state.increment();
+		if (getTarget_position() != null) {
+
+			if (getPosition().distance(getTarget_position()) < ARBITRARY_REACH_TARGET) {
+				notify_target_reached();
+			}
+		}
 	}
-	
+
 	@Override
 	public Rectangle getBoundingBox() {
 		return new Rectangle(this.getPosition().x, this.getPosition().y, RENDERING_SIZE, RENDERING_SIZE);
@@ -100,8 +104,6 @@ public abstract class GameUnitEntity extends GameUnit implements Drawable{
 	}
 
 	public Point getTarget_position() {
-		if (target_position == null)
-			return getPosition();
 		return target_position;
 	}
 
@@ -116,7 +118,7 @@ public abstract class GameUnitEntity extends GameUnit implements Drawable{
 	public void removeUnit(GameUnitEntity game_unit) throws IllegalAddException {
 		throw new IllegalAddException();
 	}
-	
+
 	public GameUnitState getState() {
 		return state;
 	}
@@ -125,12 +127,11 @@ public abstract class GameUnitEntity extends GameUnit implements Drawable{
 		this.state = state;
 	}
 
-	public void setStrikeState(){
-		System.out.println(StrikeState.getInstance(spriteManager));
+	public void setStrikeState() {
 		this.state = StrikeState.getInstance(spriteManager);
 	}
-	
-	public void setNormalState(){
+
+	public void setNormalState() {
 		this.state = NormalState.getInstance(spriteManager);
 	}
 

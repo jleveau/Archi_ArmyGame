@@ -13,14 +13,11 @@ import gameframework.core.GameEntity;
 import soldier.core.Unit;
 import soldier.core.UnitGroup;
 
-public class GameUnitGroup extends GameUnit implements GameEntity, Unit, Target, Drawable {
+public abstract class GameUnitGroup extends GameUnit implements GameEntity, Unit, Target, Drawable {
 
-	private Set<GameUnitEntity> units;
+	protected Set<GameUnitEntity> units;
 	private boolean selected;
 	private Point target_pos;
-	private static int LIFE_BAR_WIDTH = 50;
-	private static int LIFE_BAR_HEIGHT = 5;
-	private static int OFFSET_LIFE_BAT_HEIGHT = 15;
 
 	public GameUnitGroup(Canvas canvas, UnitGroup group) {
 		super(group);
@@ -84,28 +81,16 @@ public class GameUnitGroup extends GameUnit implements GameEntity, Unit, Target,
 	public Rectangle getBoundingBox() {
 		return new Rectangle(0, 0, 0, 0);
 	}
-
-	public Point getLifeBarPos() {
-		int pos_x = 0;
-		int pos_y = Integer.MAX_VALUE;
-		for (GameUnit unit : units) {
-			pos_x += unit.getPosition().x;
-			pos_y = Integer.min(pos_y, unit.getPosition().y);
-		}
-		pos_x /= units.size();
-		pos_y -= OFFSET_LIFE_BAT_HEIGHT;
-		return new Point(pos_x, pos_y);
-	}
-
+	
 	@Override
-	public void draw(Graphics g) {
-		// Draw life bar
-		Point life_bar_pos = getLifeBarPos();
-		g.setColor(Color.GREEN);
-		g.fillRect(life_bar_pos.x - (LIFE_BAR_WIDTH / 2), life_bar_pos.y, LIFE_BAR_WIDTH, LIFE_BAR_HEIGHT);
-		g.setColor(Color.black);
-		g.drawRect(life_bar_pos.x - (LIFE_BAR_WIDTH / 2), life_bar_pos.y, LIFE_BAR_WIDTH, LIFE_BAR_HEIGHT);
-
+	public int getSpeed() {
+		if (units.size() == 0)
+			return 0;
+		int speed = Integer.MAX_VALUE;
+		for (GameUnit unit : units) {
+			speed = Integer.min(speed, unit.getSpeed());
+		}
+		return speed;
 	}
 
 	@Override
@@ -120,5 +105,4 @@ public class GameUnitGroup extends GameUnit implements GameEntity, Unit, Target,
 		pos_y /= units.size();
 		return new Point(pos_x, pos_y);
 	}
-
 }

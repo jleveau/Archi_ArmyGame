@@ -11,6 +11,8 @@ import java.util.Set;
 import entity.GameUnit;
 import entity.Selectable;
 import entity.Selector;
+import gameframework.moves_rules.SpeedVector;
+import gameframework.moves_rules.SpeedVectorDefaultImpl;
 
 public class UnitSelector extends MouseAdapter implements MouseMotionListener {
 
@@ -36,6 +38,9 @@ public class UnitSelector extends MouseAdapter implements MouseMotionListener {
 				unit.setSelected(false);
 			}
 			selector.setRect(new Rectangle(press_point.x, press_point.y, 0, 0));
+		}
+		if (e.getButton() == MouseEvent.BUTTON3){
+			sendOrder(new Point(e.getX(), e.getY()));
 		}
 	}
 
@@ -66,6 +71,12 @@ public class UnitSelector extends MouseAdapter implements MouseMotionListener {
 			}
 			selector.setRect(null);
 			press_point = null;
+		}
+	}
+	
+	public void sendOrder(Point p){
+		for (Selectable unit : selectable_units) {
+			unit.receive_order(p);
 		}
 	}
 

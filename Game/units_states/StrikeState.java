@@ -12,7 +12,7 @@ public class StrikeState extends GameUnitState {
 	
 	private long last_strike;
 	static private long time_between_strike = 1000;
-	static GameUnitState singleton = null;
+	static private GameUnitState singleton = null;
 
 	public StrikeState(SpriteManager spriteManager) {
 		super(spriteManager);

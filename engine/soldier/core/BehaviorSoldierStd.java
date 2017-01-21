@@ -12,12 +12,17 @@ public class BehaviorSoldierStd implements BehaviorSoldier {
 	public BehaviorSoldierStd(float healthPoints, float force) {
 		this.healthPoints = healthPoints;
 		this.force = force;
-		this.initialHealth = force;
+		this.initialHealth = healthPoints;
 	}
 
 	@Override
 	public float getHealthPoints() {
 		return healthPoints;
+	}
+
+	@Override
+	public float getMaxHealthPoints() {
+		return initialHealth();
 	}
 
 	@Override

@@ -6,6 +6,8 @@ package soldier.core;
 
 public interface BehaviorSoldier {
 	public float getHealthPoints();
+	
+	public float getMaxHealthPoints();
 
 	public boolean alive();
 

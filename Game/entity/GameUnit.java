@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import exceptions.IllegalAddException;
 import gameframework.core.Drawable;
@@ -15,21 +17,31 @@ import gameframework.core.Overlappable;
 import gameframework.moves_rules.MoveBlocker;
 import gameframework.moves_rules.SpeedVector;
 import observer_util.Observer;
+import observers.GameObserver;
 import soldier.core.Unit;
 import soldier.core.UnitVisitor;
 import soldier.core.Weapon;
 
 public abstract class GameUnit extends GameMovable implements GameUnitItf{
+	
+	List<GameObserver<GameUnit>> game_obs;
 	public static final int RENDERING_SIZE = 16;
 
 	private Unit unit_behavior;
 	protected Canvas canvas;
 	private int team;
+	
+	public static final int BASE_SPEED = 3;
 
 
 	public GameUnit(Unit unit) {
 		super();
 		this.unit_behavior = unit;
+		game_obs = new LinkedList<GameObserver<GameUnit>>();
+	}
+	
+	public int getSpeed() {
+		return BASE_SPEED;
 	}
 
 	@Override
@@ -56,7 +68,7 @@ public abstract class GameUnit extends GameMovable implements GameUnitItf{
 	public float parry(float force) {
 		float health = unit_behavior.parry(force);
 		if (!alive())
-			notifyObservers(this);
+			notify_death();
 		return health;
 	}
 	
@@ -68,6 +80,11 @@ public abstract class GameUnit extends GameMovable implements GameUnitItf{
 		if (canStrike()){
 			enemy.parry(strike());
 		}
+	}
+
+	@Override
+	public float getMaxHealthPoints() {
+		return unit_behavior.getMaxHealthPoints();
 	}
 
 	@Override
@@ -127,7 +144,6 @@ public abstract class GameUnit extends GameMovable implements GameUnitItf{
 	
 	@Override
 	public int getTeam() {
-		
 		return team;
 	}
 
@@ -135,6 +151,31 @@ public abstract class GameUnit extends GameMovable implements GameUnitItf{
 	public void setTeam(int team) {
 		this.team = team;
 		
+	}
+	
+	@Override
+	public void remove_game_obs(GameObserver<GameUnit> obs) {
+		game_obs.remove(obs);
+	}
+
+	@Override
+	public void add_game_obs(GameObserver<GameUnit> obs) {
+		game_obs.add(obs);
+	}
+
+	@Override
+	public void notify_death() {
+		for (GameObserver<GameUnit> obs : game_obs){
+			obs.update_death(this);
+		}
+		notifyObservers(this);
+	}
+
+	@Override
+	public void notify_target_reached() {
+		for (GameObserver<GameUnit> obs : game_obs){
+			obs.update_target_reach(this);
+		}
 	}
 
 }
