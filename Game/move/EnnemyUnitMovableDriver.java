@@ -1,17 +1,17 @@
 package move;
 
-import java.awt.Point;
+import java.util.Set;
 
-import gameframework.core.GameMovableDriverDefaultImpl;
-import gameframework.core.Movable;
-import gameframework.moves_rules.SpeedVector;
-import gameframework.moves_rules.SpeedVectorDefaultImpl;
+import entity.GameUnit;
 
-public class EnnemyUnitMovableDriver  extends GameMovableDriverDefaultImpl {
 
-	@Override
-	public SpeedVector getSpeedVector(Movable m) {
-		return new SpeedVectorDefaultImpl(new Point(0,0));
+public class EnnemyUnitMovableDriver  extends AgroMoveDriver {
+
+	public EnnemyUnitMovableDriver(Set<GameUnit> units) {
+		super(units);
+		// TODO Auto-generated constructor stub
 	}
+
+	
 
 }

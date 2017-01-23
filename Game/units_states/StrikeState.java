@@ -9,28 +9,20 @@ import entity.GameUnitEntity;
 import gameframework.core.SpriteManager;
 
 public class StrikeState extends GameUnitState {
-	
-	private long last_strike;
-	static private long time_between_strike = 1000;
+
 	static private GameUnitState singleton = null;
 
-	public StrikeState(SpriteManager spriteManager) {
-		super(spriteManager);
-		last_strike = 0;
-	}
-	
 	@Override
-	public boolean canStrike() {
+	public boolean canStrike(GameUnitEntity unit) {
 		long time = System.currentTimeMillis();
-		if (last_strike == 0){
-			last_strike = time;
+		if (unit.getLast_strike() == 0) {
+			unit.setLast_strike(time);
 			return true;
-		}
-		else{
-			if (last_strike+time_between_strike < time){
-				last_strike = time;
+		} else {
+			if (unit.getLast_strike() + unit.getTime_between_strike() < time) {
+				unit.setLast_strike(time);
 				return true;
-			}	
+			}
 		}
 		return false;
 	}
@@ -54,14 +46,14 @@ public class StrikeState extends GameUnitState {
 			g.setColor(Color.GREEN);
 			g.drawRect(box.x, box.y, box.width, box.height);
 		}
-		spriteManager.setType(spriteType);
-		spriteManager.draw(g, unit.getPosition());
+		unit.getSpriteManager().setType(spriteType);
+		unit.getSpriteManager().draw(g, unit.getPosition());
 	}
-	
-	public static GameUnitState getInstance(SpriteManager spriteManager) {
-		if (singleton != null) 
+
+	public static GameUnitState getInstance() {
+		if (singleton != null)
 			return singleton;
-		singleton =  new StrikeState(spriteManager);
+		singleton = new StrikeState();
 		return singleton;
 	}
 }

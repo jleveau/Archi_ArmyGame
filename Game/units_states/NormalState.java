@@ -11,13 +11,9 @@ import gameframework.core.SpriteManager;
 public class NormalState extends GameUnitState {
 	static GameUnitState singleton = null;
 
-	public NormalState(SpriteManager spriteManager) {
-		super(spriteManager);
-	}
-
 	@Override
 	public void draw(Graphics g, GameUnitEntity unit) {
-		String spriteType = "";
+		String spriteType = "beginAfraid-";
 		Point tmp = unit.getSpeedVector().getDirection();
 
 		if (tmp.getX() == -1) {
@@ -29,19 +25,21 @@ public class NormalState extends GameUnitState {
 		} else {
 			spriteType += "right";
 		}
+
+		unit.getSpriteManager().setType(spriteType);
+		unit.getSpriteManager().draw(g, unit.getPosition());
+		
 		if (unit.isSelected()) {
 			Rectangle box = unit.getBoundingBox();
 			g.setColor(Color.GREEN);
 			g.drawRect(box.x, box.y, box.width, box.height);
 		}
-		spriteManager.setType(spriteType);
-		spriteManager.draw(g, unit.getPosition());
 	}
 
-	public static GameUnitState getInstance(SpriteManager spriteManager) {
+	public static GameUnitState getInstance() {
 		if (singleton != null) 
 			return singleton;
-		return singleton = new NormalState(spriteManager);
+		return singleton = new NormalState();
 	}
 
 }

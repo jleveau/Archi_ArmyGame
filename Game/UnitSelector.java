@@ -76,7 +76,8 @@ public class UnitSelector extends MouseAdapter implements MouseMotionListener {
 	
 	public void sendOrder(Point p){
 		for (Selectable unit : selectable_units) {
-			unit.receive_order(p);
+			if (unit.isSelected())
+				unit.receive_order(p);
 		}
 	}
 

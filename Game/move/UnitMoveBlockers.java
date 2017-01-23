@@ -2,6 +2,7 @@ package move;
 
 import entity.GameUnit;
 import entity.GameSwordMan;
+import gameframework.core.GameLevel;
 import gameframework.moves_rules.IllegalMoveException;
 import gameframework.moves_rules.MoveBlockerRulesApplierDefaultImpl;
 import units_states.StrikeState;

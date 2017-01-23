@@ -34,4 +34,16 @@ public class GameSwordMan extends GameUnitEntity implements MoveBlocker{
 		return 5;
 	}
 
+	@Override
+	public void createSpriteManager() {
+		spriteManager = new SpriteManagerDefaultImpl("images/ghost.gif", canvas, RENDERING_SIZE, 6);
+		spriteManager.setTypes(
+				//
+				"left", "right", "up", "down", //
+				"beginAfraid-left", "beginAfraid-right", "beginAfraid-up", "beginAfraid-down", //
+				"endAfraid-left", "endAfraid-right", "endAfraid-up", "endAfraid-down", //
+				"inactive-left", "inactive-right", "inactive-up", "inactive-down", //
+				"unused");
+	}
+
 }

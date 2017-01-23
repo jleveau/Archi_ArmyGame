@@ -57,11 +57,11 @@ public class GameLevelOne extends ArmyGameLevel {
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+			{ 1, 0, 0, 0, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 0, 0, 0, 0, 1 },
+			{ 1, 0, 0, 0, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 0, 0, 0, 0, 1 },
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
 			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } };
 
@@ -100,9 +100,16 @@ public class GameLevelOne extends ArmyGameLevel {
 		LevelOneUnitFactory factory = new LevelOneUnitFactory(canvas);
 
 		Regiment regiment_enemy = factory.regiment("reg ennemy");
+		
+		Regiment[] player_regiments = new Regiment[3];
 
-		Regiment regiment = factory.regiment("reg 1");
-		Regiment regiment_2 = factory.regiment("reg 2");
+		for (int i=0; i< player_regiments.length; ++i){
+			player_regiments[i]=factory.regiment("regiment " + i);
+		}
+		
+		EnnemyUnitMovableDriver enemyDriv = new EnnemyUnitMovableDriver(player_units);
+		PlayerMoveDriver playerDriver = new PlayerMoveDriver(enemy_units, moveBlockerChecker);
+
 
 		for (int j = 0; j < tab.length; j++) {
 			for (int i = 0; i < tab[j].length; i++) {
@@ -112,7 +119,6 @@ public class GameLevelOne extends ArmyGameLevel {
 				}
 				// create Enemies
 				if (tab[j][i] == 2) {
-					GameMovableDriverDefaultImpl enemyDriv = new EnnemyUnitMovableDriver();
 					MoveStrategyRandom ranStr = new MoveStrategyRandom();
 					enemyDriv.setStrategy(ranStr);
 					enemyDriv.setmoveBlockerChecker(moveBlockerChecker);
@@ -128,30 +134,32 @@ public class GameLevelOne extends ArmyGameLevel {
 
 				}
 				// Create Player Units
-				if (tab[j][i] == 3) {
-
-					PlayerMoveDriver playerDriver = new PlayerMoveDriver(enemy_units, moveBlockerChecker);
-
+				else if (tab[j][i] >= 3){
 					// create Swordman
+					Regiment regiment = player_regiments[tab[j][i] - 3];
 					sword_man = factory.infantryUnit(canvas, "Player swordman");
 					sword_man.setDriver(playerDriver);
 					sword_man.setPosition(new Point(i * SPRITE_SIZE, j * SPRITE_SIZE));
 					sword_man.setTeam(Player_team);
+					sword_man.add_game_obs(kill_obs);
 					player_units.add(sword_man);
 					regiment.addUnit(sword_man);
 					universe.addGameEntity(sword_man);
 				}
 			}
 		}
-		universe.addGameEntity(regiment);
 		universe.addGameEntity(regiment_enemy);
-
-		unit_selector.addUnit(regiment);
-		unit_selector.addUnit(regiment_2);
-
-		regiment.add_game_obs(kill_obs);
-		regiment_2.add_game_obs(kill_obs);
 		regiment_enemy.add_game_obs(kill_obs);
+
+		for (int i=0; i<player_regiments.length; ++i){
+			Regiment regiment = player_regiments[i];
+			universe.addGameEntity(regiment);
+
+			unit_selector.addUnit(regiment);
+
+			regiment.add_game_obs(kill_obs);
+		}
+		
 
 	}
 }

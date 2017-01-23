@@ -12,7 +12,7 @@ import soldier.core.Weapon;
 public class UnitSwordMan extends UnitInfantry {
 
 	public UnitSwordMan(String soldierName) {
-		super(soldierName, new BehaviorSoldierStd(15, 100));
+		super(soldierName, new BehaviorSoldierStd(100, 15));
 	}
 
 	/**

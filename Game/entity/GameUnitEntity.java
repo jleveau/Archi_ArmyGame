@@ -29,30 +29,31 @@ public abstract class GameUnitEntity extends GameUnit implements Drawable {
 	protected static DrawableImage image = null;
 	protected boolean active = true;
 	private static int ARBITRARY_REACH_TARGET=5;
+	private static int ATTACK_SPEED = 1000;
 	protected boolean selected;
 	Point target_position;
 	GameUnitState state;
-	private SpriteManager spriteManager;
+	
+	private long last_strike;
+	private long time_between_strike;
+	
+	protected SpriteManager spriteManager;
 
 	public GameUnitEntity(Canvas defaultCanvas, Unit unit) {
 		super(unit);
 		canvas = defaultCanvas;
-		spriteManager = new SpriteManagerDefaultImpl("images/ghost.gif", canvas, RENDERING_SIZE, 6);
 
-		state = NormalState.getInstance(spriteManager);
-
-		spriteManager.setTypes(
-				//
-				"left", "right", "up", "down", //
-				"beginAfraid-left", "beginAfraid-right", "beginAfraid-up", "beginAfraid-down", //
-				"endAfraid-left", "endAfraid-right", "endAfraid-up", "endAfraid-down", //
-				"inactive-left", "inactive-right", "inactive-up", "inactive-down", //
-				"unused");
+		state = NormalState.getInstance();
+		time_between_strike = ATTACK_SPEED;
+		last_strike = 0;
+		createSpriteManager();
 	}
+	
+	public abstract void createSpriteManager();
 
 	@Override
 	public boolean canStrike() {
-		return state.canStrike();
+		return state.canStrike(this);
 	}
 
 	public boolean isActive() {
@@ -74,12 +75,14 @@ public abstract class GameUnitEntity extends GameUnit implements Drawable {
 
 	@Override
 	public void oneStepMoveAddedBehavior() {
-		state.increment();
+		spriteManager.increment();
 		if (getTarget_position() != null) {
-
 			if (getPosition().distance(getTarget_position()) < ARBITRARY_REACH_TARGET) {
 				notify_target_reached();
 			}
+		}
+		if (canStrike()){
+			setState(NormalState.getInstance());
 		}
 	}
 
@@ -128,11 +131,31 @@ public abstract class GameUnitEntity extends GameUnit implements Drawable {
 	}
 
 	public void setStrikeState() {
-		this.state = StrikeState.getInstance(spriteManager);
+		this.state = StrikeState.getInstance();
 	}
 
 	public void setNormalState() {
-		this.state = NormalState.getInstance(spriteManager);
+		this.state = NormalState.getInstance();
+	}
+	
+	public long getLast_strike() {
+		return last_strike;
+	}
+
+	public void setLast_strike(long last_strike) {
+		this.last_strike = last_strike;
+	}
+	
+	public long getTime_between_strike() {
+		return time_between_strike;
+	}
+
+	public void setTime_between_strike(long time_between_strike) {
+		this.time_between_strike = time_between_strike;
+	}
+
+	public SpriteManager getSpriteManager() {
+		return spriteManager;
 	}
 
 }
