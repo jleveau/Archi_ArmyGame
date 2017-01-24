@@ -1,24 +1,19 @@
 package entity;
 
 import java.awt.Canvas;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
-import javax.xml.bind.annotation.adapters.NormalizedStringAdapter;
-
+import Weapons.GameWeapon;
+import Weapons.ThrowableRock;
 import exceptions.IllegalAddException;
 import gameframework.core.Drawable;
 import gameframework.core.DrawableImage;
-import gameframework.core.GameEntity;
-import gameframework.core.GameMovable;
-import gameframework.core.Movable;
-import gameframework.core.Overlappable;
 import gameframework.core.SpriteManager;
-import gameframework.core.SpriteManagerDefaultImpl;
-import gameframework.moves_rules.MoveBlocker;
-import observer_util.Observable;
 import soldier.core.Unit;
 import units_states.GameUnitState;
 import units_states.NormalState;
@@ -33,6 +28,7 @@ public abstract class GameUnitEntity extends GameUnit implements Drawable {
 	protected boolean selected;
 	Point target_position;
 	GameUnitState state;
+	protected Set<GameWeapon> weapons;
 	
 	private long last_strike;
 	private long time_between_strike;
@@ -42,7 +38,7 @@ public abstract class GameUnitEntity extends GameUnit implements Drawable {
 	public GameUnitEntity(Canvas defaultCanvas, Unit unit) {
 		super(unit);
 		canvas = defaultCanvas;
-
+		weapons = new HashSet<GameWeapon>();
 		state = NormalState.getInstance();
 		time_between_strike = ATTACK_SPEED;
 		last_strike = 0;
@@ -156,6 +152,15 @@ public abstract class GameUnitEntity extends GameUnit implements Drawable {
 
 	public SpriteManager getSpriteManager() {
 		return spriteManager;
+	}
+	
+	public void pickRock(ThrowableRock g) {
+		this.addEquipment(g);
+		weapons.add(g);
+	}
+	
+	public Iterator<GameWeapon> getDrawableWeapons(){
+		return weapons.iterator();
 	}
 
 }

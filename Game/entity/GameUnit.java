@@ -4,6 +4,7 @@ import java.awt.Canvas;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,6 +22,7 @@ import observers.GameObserver;
 import soldier.core.Unit;
 import soldier.core.UnitVisitor;
 import soldier.core.Weapon;
+import soldier.util.WeaponCounterVisitor;
 
 public abstract class GameUnit extends GameMovable implements GameUnitItf{
 	
@@ -106,6 +108,12 @@ public abstract class GameUnit extends GameMovable implements GameUnitItf{
 	public Iterator<Weapon> getWeapons() {
 		return unit_behavior.getWeapons();
 	}
+	
+	public boolean hasWeapon(){
+		WeaponCounterVisitor visitor = new WeaponCounterVisitor();
+		unit_behavior.accept(visitor);
+		return visitor.attWeapon + visitor.defWeapon == 0;
+	}
 
 	@Override
 	public void accept(UnitVisitor v) {
@@ -165,7 +173,11 @@ public abstract class GameUnit extends GameMovable implements GameUnitItf{
 
 	@Override
 	public void notify_death() {
+		List<GameObserver<GameUnit>> list_obs = new ArrayList<GameObserver<GameUnit>>();
 		for (GameObserver<GameUnit> obs : game_obs){
+			list_obs.add(obs);
+		}
+		for (GameObserver<GameUnit> obs : list_obs){
 			obs.update_death(this);
 		}
 		notifyObservers(this);
@@ -173,7 +185,11 @@ public abstract class GameUnit extends GameMovable implements GameUnitItf{
 
 	@Override
 	public void notify_target_reached() {
+		List<GameObserver<GameUnit>> list_obs = new ArrayList<GameObserver<GameUnit>>();
 		for (GameObserver<GameUnit> obs : game_obs){
+			list_obs.add(obs);
+		}
+		for (GameObserver<GameUnit> obs : list_obs){
 			obs.update_target_reach(this);
 		}
 	}

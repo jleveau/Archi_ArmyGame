@@ -6,6 +6,7 @@ import entity.GameSwordMan;
 import entity.GameUnit;
 import entity.Regiment;
 import entity.Selector;
+import entity.UnitSelector;
 import entity.Wall;
 import gameframework.core.CanvasDefaultImpl;
 import gameframework.core.GameMovableDriverDefaultImpl;
@@ -137,7 +138,7 @@ public class GameLevelOne extends ArmyGameLevel {
 				else if (tab[j][i] >= 3){
 					// create Swordman
 					Regiment regiment = player_regiments[tab[j][i] - 3];
-					sword_man = factory.infantryUnit(canvas, "Player swordman");
+					sword_man = factory.playerInfantryUnit(canvas, "Player swordman");
 					sword_man.setDriver(playerDriver);
 					sword_man.setPosition(new Point(i * SPRITE_SIZE, j * SPRITE_SIZE));
 					sword_man.setTeam(Player_team);

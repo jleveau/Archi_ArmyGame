@@ -13,7 +13,7 @@ public class PlayerSwordMan extends GameSwordMan{
 
 	@Override
 	public void createSpriteManager() {
-		spriteManager = new SpriteManagerDefaultImpl("images/ghost.gif", canvas, RENDERING_SIZE, 6);
+		spriteManager = new SpriteManagerDefaultImpl("images/player.gif", canvas, RENDERING_SIZE, 6);
 		spriteManager.setTypes(
 				//
 				"left", "right", "up", "down", //
@@ -22,7 +22,7 @@ public class PlayerSwordMan extends GameSwordMan{
 				"inactive-left", "inactive-right", "inactive-up", "inactive-down", //
 				"unused");
 	}
-	
+
 	
 
 }

@@ -5,6 +5,9 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import javax.swing.text.html.HTMLDocument.Iterator;
+
+import Weapons.GameWeapon;
 import entity.GameUnitEntity;
 import gameframework.core.SpriteManager;
 
@@ -33,6 +36,10 @@ public class NormalState extends GameUnitState {
 			Rectangle box = unit.getBoundingBox();
 			g.setColor(Color.GREEN);
 			g.drawRect(box.x, box.y, box.width, box.height);
+		}
+		java.util.Iterator<GameWeapon> it = unit.getDrawableWeapons();
+		while(it.hasNext()){
+			it.next().draw(g);
 		}
 	}
 

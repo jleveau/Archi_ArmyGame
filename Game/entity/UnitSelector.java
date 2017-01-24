@@ -1,3 +1,4 @@
+package entity;
 import java.awt.Canvas;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -8,9 +9,6 @@ import java.awt.event.MouseMotionListener;
 import java.util.HashSet;
 import java.util.Set;
 
-import entity.GameUnit;
-import entity.Selectable;
-import entity.Selector;
 import gameframework.moves_rules.SpeedVector;
 import gameframework.moves_rules.SpeedVectorDefaultImpl;
 
@@ -21,7 +19,7 @@ public class UnitSelector extends MouseAdapter implements MouseMotionListener {
 	Canvas canvas;
 	Selector selector;
 
-	UnitSelector(Selector s) {
+	public UnitSelector(Selector s) {
 		selectable_units = new HashSet<Selectable>();
 		selector = s;
 	}
