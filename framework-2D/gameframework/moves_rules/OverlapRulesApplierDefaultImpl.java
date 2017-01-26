@@ -20,6 +20,7 @@ public abstract class OverlapRulesApplierDefaultImpl implements
 		try {
 			m = getClass().getMethod("overlapRule", e1.getClass(),
 					e2.getClass());
+			
 		} catch (NoSuchMethodException e) {
 			// automatic commutativity handling
 			reverseParameters(e1, e2);

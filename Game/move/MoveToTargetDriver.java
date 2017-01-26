@@ -3,8 +3,8 @@ package move;
 import java.awt.Point;
 import java.util.Random;
 
-import entity.GameUnit;
-import entity.GameUnitEntity;
+import entity_middle_age.GameUnit;
+import entity_middle_age.GameUnitEntity;
 import gameframework.core.GameMovableDriver;
 import gameframework.core.GameMovableDriverDefaultImpl;
 import gameframework.core.Movable;

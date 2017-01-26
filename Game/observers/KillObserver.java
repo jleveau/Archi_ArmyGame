@@ -1,6 +1,6 @@
 package observers;
 
-import entity.GameUnit;
+import entity_middle_age.GameUnit;
 import gameframework.core.GameUniverse;
 
 public class KillObserver implements GameObserver<GameUnit> {

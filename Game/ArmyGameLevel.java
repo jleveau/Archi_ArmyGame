@@ -4,18 +4,17 @@ import java.util.Date;
 import gameframework.core.GameLevel;
 import gameframework.core.GameUniverse;
 import gameframework.core.GameUniverseViewPort;
+import gameframework.core.GameUniverseViewPortDefaultImpl;
 import gameframework.core.ObservableValue;
 
 public abstract class ArmyGameLevel extends Thread implements GameLevel{
 	private static final int MINIMUM_DELAY_BETWEEN_GAME_CYCLES = 100;
 	boolean stopGameLoop;
 	Canvas canvas;
-	int base_gold;
 	protected ArmyGame g;
-	protected GameUniverse universe;
-	protected GameUniverseViewPort gameBoard;
+	protected ArmyGameUniverse universe;
+	protected GameUniverseViewPortDefaultImpl gameBoard;
 
-	protected ObservableValue<Integer> gold[];
 	protected ObservableValue<Integer> enemy_units[];
 	protected ObservableValue<Integer> player_units[];
 
@@ -26,14 +25,9 @@ public abstract class ArmyGameLevel extends Thread implements GameLevel{
 	
 	protected abstract void init();
 	
-	public int getBaseGold(){
-		return base_gold;
-	}
-	
-	public ArmyGameLevel(ArmyGame g, int base_gold) {
+
+	public ArmyGameLevel(ArmyGame g) {
 		this.g = g;
-		this.base_gold = base_gold;
-		this.gold = g.gold();
 		
 		canvas = g.getCanvas();
 	}
@@ -48,6 +42,7 @@ public abstract class ArmyGameLevel extends Thread implements GameLevel{
 
 		init();
 		super.start();
+
 		try {
 			super.join();
 		} catch (InterruptedException e) {
@@ -64,7 +59,6 @@ public abstract class ArmyGameLevel extends Thread implements GameLevel{
 
 		while (!stopGameLoop && !this.isInterrupted()) {
 			start = new Date().getTime();
-
 			gameBoard.paint();
 			universe.allOneStepMoves();
 			universe.processAllOverlaps();

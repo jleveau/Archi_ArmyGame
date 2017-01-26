@@ -3,7 +3,7 @@ package move;
 import java.awt.Point;
 import java.util.Set;
 
-import entity.GameUnit;
+import entity_middle_age.GameUnit;
 import gameframework.core.GameMovableDriverDefaultImpl;
 import gameframework.core.Movable;
 import gameframework.moves_rules.SpeedVector;

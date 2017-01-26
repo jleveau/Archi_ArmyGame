@@ -34,7 +34,6 @@ public class ArmyGame implements Game, Observer{
 	
 
 	protected CanvasDefaultImpl defaultCanvas = null;
-	protected ObservableValue<Integer> gold[] = new ObservableValue[MAX_NUMBER_OF_PLAYER];
 
 	// initialized before each level
 	protected ObservableValue<Boolean> endOfGame = null;
@@ -46,19 +45,15 @@ public class ArmyGame implements Game, Observer{
 	protected ArrayList<GameLevel> gameLevels;
 	protected int current_player;
 
-	protected Label goldText, goldValue;
 	protected Label information;
 	protected Label informationValue;
 	protected Label currentLevel;
 	protected Label currentLevelValue;
+	private String game_type;
 
 	public ArmyGame() {
 		HEIGHT = SPRITE_SIZE * NB_ROWS;
 		WIDTH = SPRITE_SIZE * NB_COLUMNS;
-		for (int i = 0; i < MAX_NUMBER_OF_PLAYER; ++i) {
-			gold[i] = new ObservableValue<Integer>(0);
-		}
-		goldText = new Label("Gold Coins:");
 		currentLevel = new Label("Level:");
 		current_player = 0;
 		createGUI();
@@ -89,7 +84,8 @@ public class ArmyGame implements Game, Observer{
 	private void createMenuBar() {
 		MenuBar menuBar = new MenuBar();
 		Menu file = new Menu("file");
-		MenuItem start = new MenuItem("new game");
+		MenuItem start_medieval = new MenuItem("new game medieval");
+		MenuItem start_space = new MenuItem("new game spacial");
 		MenuItem save = new MenuItem("save");
 		MenuItem restore = new MenuItem("load");
 		MenuItem quit = new MenuItem("quit");
@@ -99,8 +95,14 @@ public class ArmyGame implements Game, Observer{
 		menuBar.add(file);
 		menuBar.add(game);
 		f.setMenuBar(menuBar);
+		
+		start_medieval.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				start();
+			}
+		});
 
-		start.addActionListener(new ActionListener() {
+		start_space.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				start();
 			}
@@ -131,7 +133,8 @@ public class ArmyGame implements Game, Observer{
 			}
 		});
 
-		file.add(start);
+		file.add(start_medieval);
+		file.add(start_space);
 		file.add(save);
 		file.add(restore);
 		file.add(quit);
@@ -143,10 +146,7 @@ public class ArmyGame implements Game, Observer{
 		JPanel c = new JPanel();
 		FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
 		c.setLayout(layout);
-		goldValue = new Label(Integer.toString(gold[0].getValue()));
 		currentLevelValue = new Label(Integer.toString(levelNumber));
-		c.add(goldText);
-		c.add(goldValue);
 		c.add(currentLevel);
 		c.add(currentLevelValue);
 		return c;
@@ -157,9 +157,7 @@ public class ArmyGame implements Game, Observer{
 	}
 
 	public void start() {
-		for (int i = 0; i < MAX_NUMBER_OF_PLAYER; ++i) {
-			gold[i].addObserver(this);
-		}
+
 		levelNumber = 0;
 		for (GameLevel level : gameLevels) {
 			endOfGame = new ObservableValue<Boolean>(false);
@@ -202,9 +200,6 @@ public class ArmyGame implements Game, Observer{
 		return current_player;
 	}
 
-	public ObservableValue<Integer>[] gold() {
-		return gold;
-	}
 
 	public ObservableValue<Boolean> endOfGame() {
 		return endOfGame;
@@ -220,17 +215,6 @@ public class ArmyGame implements Game, Observer{
 				informationValue.setText("You win");
 				currentPlayedLevel.interrupt();
 				currentPlayedLevel.end();
-			}
-		} else {
-
-			for (ObservableValue<Integer> goldObservable : gold) {
-				if (o == goldObservable) {
-					
-					goldValue
-							.setText(Integer
-									.toString(((ObservableValue<Integer>) o)
-											.getValue()));
-				}
 			}
 		}
 	}

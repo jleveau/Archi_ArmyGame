@@ -8,8 +8,9 @@ public class Main {
 		ArmyGame g = new ArmyGame();
 		ArrayList<GameLevel> levels = new ArrayList<>();
 
-		levels.add(new GameLevelOne(g)); // only one level is available
-		
+		//levels.add(new GameLevelMedieval(g)); // only one level is available
+		levels.add(new GameLevelSpacial(g)); // only one level is available
+
 		g.setLevels(levels);
 
 		g.start();

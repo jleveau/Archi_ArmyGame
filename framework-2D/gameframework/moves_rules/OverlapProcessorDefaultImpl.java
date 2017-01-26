@@ -72,6 +72,7 @@ public class OverlapProcessorDefaultImpl implements OverlapProcessor {
 		boundingBoxOverlappable = intersectShape.getBounds();
 
 		for (Overlappable targetOverlappable : overlappablesNonMovable) {
+
 			if (targetOverlappable != overlappable) {
 				Shape targetShape;
 				targetShape = targetOverlappable.getBoundingBox();
@@ -80,7 +81,9 @@ public class OverlapProcessorDefaultImpl implements OverlapProcessor {
 				if (boundingBoxOverlappable.intersects(boundingBoxTarget)) {
 					targetArea = new Area(targetShape);
 					targetArea.intersect(overlappableArea);
+
 					if (!targetArea.isEmpty()) {
+
 						overlaps.add(new Overlap(overlappable,
 								targetOverlappable));
 					}
@@ -101,6 +104,7 @@ public class OverlapProcessorDefaultImpl implements OverlapProcessor {
 				boundingBoxTarget = targetShape.getBounds();
 
 				if (boundingBoxOverlappable.intersects(boundingBoxTarget)) {
+
 					targetArea = new Area(targetShape);
 					targetArea.intersect(overlappableArea);
 					if (!targetArea.isEmpty()) {

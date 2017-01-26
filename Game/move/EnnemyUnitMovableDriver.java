@@ -2,7 +2,7 @@ package move;
 
 import java.util.Set;
 
-import entity.GameUnit;
+import entity_middle_age.GameUnit;
 
 
 public class EnnemyUnitMovableDriver  extends AgroMoveDriver {

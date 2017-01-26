@@ -9,8 +9,7 @@ import java.util.Iterator;
 
 import observer_util.ObservableAbstract;
 
-public abstract class UnitSimple extends ObservableAbstract<Unit> 
-                                 implements Unit {
+public abstract class UnitSimple extends ObservableAbstract<Unit> implements Unit {
 
 	private BehaviorSoldier behavior;
 	private String name;
@@ -65,16 +64,21 @@ public abstract class UnitSimple extends ObservableAbstract<Unit>
 
 	@Override
 	public void removeEquipment(Weapon w) {
+
 		BehaviorSoldier current = behavior;
 		BehaviorSoldier previous = behavior;
-		while (current instanceof BehaviorExtension
-				&& ((BehaviorExtension) current).getOwner() != w) {
+		while (current instanceof BehaviorExtension && ((BehaviorExtension) current).getOwner() != w) {
 			previous = current;
 			current = ((BehaviorExtension) current).parent();
 		}
 		if (((BehaviorExtension) current).getOwner() == w) {
-			((BehaviorExtension) previous)
-					.reparent(((BehaviorExtension) previous).parent());
+			BehaviorSoldier new_parent = ((BehaviorExtension) previous).parent();
+			// Adding this test to be able to remove the weapon if its the only extension
+			if (!(((BehaviorExtension) current).parent() instanceof BehaviorExtension)) {
+				behavior = ((BehaviorExtension) current).parent();
+			} else {
+				((BehaviorExtension) previous).reparent(new_parent);
+			}
 		}
 	}
 

@@ -8,7 +8,7 @@ import java.awt.Rectangle;
 import javax.swing.text.html.HTMLDocument.Iterator;
 
 import Weapons.GameWeapon;
-import entity.GameUnitEntity;
+import entity_middle_age.GameUnitEntity;
 import gameframework.core.SpriteManager;
 
 public class NormalState extends GameUnitState {
@@ -16,7 +16,12 @@ public class NormalState extends GameUnitState {
 
 	@Override
 	public void draw(Graphics g, GameUnitEntity unit) {
-		String spriteType = "beginAfraid-";
+		String spriteType;
+		if (unit.hasWeapon())
+			spriteType = "hasWeapon-";
+		else
+			spriteType = "beginAfraid-";
+		
 		Point tmp = unit.getSpeedVector().getDirection();
 
 		if (tmp.getX() == -1) {
@@ -28,7 +33,6 @@ public class NormalState extends GameUnitState {
 		} else {
 			spriteType += "right";
 		}
-
 		unit.getSpriteManager().setType(spriteType);
 		unit.getSpriteManager().draw(g, unit.getPosition());
 		
@@ -36,10 +40,6 @@ public class NormalState extends GameUnitState {
 			Rectangle box = unit.getBoundingBox();
 			g.setColor(Color.GREEN);
 			g.drawRect(box.x, box.y, box.width, box.height);
-		}
-		java.util.Iterator<GameWeapon> it = unit.getDrawableWeapons();
-		while(it.hasNext()){
-			it.next().draw(g);
 		}
 	}
 

@@ -6,7 +6,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 
 import Weapons.GameWeapon;
-import entity.GameUnitEntity;
+import entity_middle_age.GameUnitEntity;
 import gameframework.core.SpriteManager;
 
 public class StrikeState extends GameUnitState {
@@ -49,11 +49,6 @@ public class StrikeState extends GameUnitState {
 		}
 		unit.getSpriteManager().setType(spriteType);
 		unit.getSpriteManager().draw(g, unit.getPosition());
-		
-		java.util.Iterator<GameWeapon> it = unit.getDrawableWeapons();
-		while(it.hasNext()){
-			it.next().draw(g);
-		}
 	}
 
 	public static GameUnitState getInstance() {
